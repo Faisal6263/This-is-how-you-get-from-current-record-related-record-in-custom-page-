@@ -1,0 +1,60 @@
+This is JS File code for side dialogue 
+
+function ProcessAccreditation(primaryControl) {
+    debugger;
+
+    var formContext = primaryControl;
+    var openrecordId = formContext.data.entity.getId().replace("{", "").replace("}", ""); // Get the GUID of the current record
+    
+    alert("accreditation id "+openrecordId)
+
+    var pageInput = {
+        pageType: "custom",
+        name: "cr18b_processaccreditation_baf45",
+        recordId: openrecordId,
+    };
+
+    var navigationOptions = {
+        target: 2, 
+        position: 2,
+        width: 500, 
+        title: "Process Accreditation"
+    };
+
+    Xrm.Navigation.navigateTo(pageInput, navigationOptions)
+        .then(
+            function () {
+                // Called when the dialog closes
+            }
+        )
+        .catch(
+            function (error) {
+                // Handle error
+            }
+        );
+}
+
+
+Set(
+    recordId,
+    Param("recordId") <------------ this record id is i am getting from JS File from line 7 i am getting current record id
+);
+
+
+Set(
+    objCentreAccreditationtype,
+    LookUp(
+        'Centre Accreditations', <----- this is the data source that is present in my canvas app 
+        'Centre Accreditation' <----------- this is the field that i am getting from the entity that is GUID of the record
+         = GUID(recordId) <-------- assigning it from the JS file what i got the current Record ID
+    )
+);
+
+
+Set(
+    objCase, <----- here it will be GUID of the Case 
+    LookUp(
+        Cases, <----- this is the data source that is present in my canvas app 
+        Case = objCentreAccreditation.Case.Case <----- this is where i am accessing the related case ID  from Centre accreditation Entity record 
+    )
+);
